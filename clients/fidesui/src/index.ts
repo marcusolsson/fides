@@ -1,3 +1,6 @@
+// Custom implimentation of ChakraUI components for FidesUI
+export * from "./hooks/useToast"; // allows for themeing of toast component
+
 // Unmodified components exported directly from ChakraUI
 export * from "@chakra-ui/accordion";
 export * from "@chakra-ui/alert";
@@ -39,7 +42,6 @@ export * from "@chakra-ui/table";
 export * from "@chakra-ui/tabs";
 export * from "@chakra-ui/tag";
 export * from "@chakra-ui/textarea";
-export * from "@chakra-ui/toast";
 export * from "@chakra-ui/tooltip";
 export * from "@chakra-ui/transition";
 export * from "@chakra-ui/utils";
