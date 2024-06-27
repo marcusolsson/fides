@@ -1,33 +1,33 @@
 import { Text, UseToastOptions } from "fidesui";
 import { ReactNode } from "react";
 
-const SuccessMessage = ({ children }: { children: ReactNode }) => (
-  <Text data-testid="toast-success-msg">
-    <strong>Success:</strong> {children}
+import { sentenceCase } from "~/features/common/utils";
+
+interface MessageProps {
+  status?: UseToastOptions["status"];
+  children: ReactNode;
+}
+const Message = ({ status = "success", children }: MessageProps) => (
+  <Text data-testid={`toast-${status}-msg`}>
+    <strong>{sentenceCase(status)}:</strong> {children}
   </Text>
 );
 
-const ErrorMessage = ({ children }: { children: ReactNode }) => (
-  <Text data-testid="toast-error-msg">
-    <strong>Error:</strong> {children}
-  </Text>
-);
+export const toastMessage = (
+  message: ReactNode,
+  status: UseToastOptions["status"] = "success"
+): UseToastOptions => ({
+  description: <Message status={status}>{message}</Message>,
+});
 
-export const DEFAULT_TOAST_PARAMS: UseToastOptions = {
-  variant: "subtle",
-  position: "top",
-  description: "",
-  duration: 5000,
-  status: "success",
-  isClosable: true,
-};
+export const successToastParams = (message: ReactNode): UseToastOptions =>
+  toastMessage(message, "success");
 
-export const successToastParams = (message: ReactNode): UseToastOptions => {
-  const description = <SuccessMessage>{message}</SuccessMessage>;
-  return { ...DEFAULT_TOAST_PARAMS, ...{ description } };
-};
+export const errorToastParams = (message: ReactNode): UseToastOptions =>
+  toastMessage(message, "error");
 
-export const errorToastParams = (message: ReactNode): UseToastOptions => {
-  const description = <ErrorMessage>{message}</ErrorMessage>;
-  return { ...DEFAULT_TOAST_PARAMS, ...{ description, status: "error" } };
-};
+export const warningToastParams = (message: ReactNode): UseToastOptions =>
+  toastMessage(message, "warning");
+
+export const infoToastParams = (message: ReactNode): UseToastOptions =>
+  toastMessage(message, "info");
