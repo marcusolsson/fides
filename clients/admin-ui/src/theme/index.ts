@@ -30,6 +30,16 @@ const theme = extendTheme({
         },
       },
     },
+    Toast: {
+      // see custom useToast hook in fidesui
+      defaultProps: {
+        variant: "subtle",
+        position: "top",
+        duration: 5000,
+        status: "success",
+        isClosable: true,
+      },
+    },
     Button,
     Divider: {
       baseStyle: {
