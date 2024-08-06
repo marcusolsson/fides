@@ -35,7 +35,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
   <SafeHydrate>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <FidesUIProvider theme={theme}>
+        <FidesUIProvider
+          theme={theme}
+          antTheme={{
+            token: {
+              colorPrimary: "#003388",
+            },
+          }}
+        >
           <DndProvider backend={HTML5Backend}>
             {Component === Login || Component === LoginWithOIDC ? (
               // Only the login page is accessible while logged out. If there is
