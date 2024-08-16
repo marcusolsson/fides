@@ -2,6 +2,7 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
+import "../theme/tailwind.css";
 
 import { FidesUIProvider, Flex } from "fidesui";
 import type { AppProps } from "next/app";

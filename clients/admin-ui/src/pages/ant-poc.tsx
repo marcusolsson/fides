@@ -36,10 +36,10 @@ const AntPOC: NextPage = () => {
             Ant Design Proof of Concept
           </Title>
         </Header>
-        <Content style={{ padding: "24px 40px", overflowX: "auto" }}>
+        <Content className="overflow-auto px-10 py-6">
           <Row gutter={16}>
             <Col span={8}>
-              <Card title="Button" bordered={false} style={{ height: "100%" }}>
+              <Card title="Button" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Button type="primary">Primary Button</Button>
                   <Button>Default Button</Button>
@@ -56,7 +56,7 @@ const AntPOC: NextPage = () => {
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Switch" bordered={false} style={{ height: "100%" }}>
+              <Card title="Switch" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Switch defaultChecked />
                   <Switch size="small" defaultChecked />
@@ -65,11 +65,11 @@ const AntPOC: NextPage = () => {
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Select" bordered={false} style={{ height: "100%" }}>
+              <Card title="Select" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Select
                     defaultValue="lucy"
-                    style={{ width: 120 }}
+                    className="w-32"
                     options={[
                       { value: "jack", label: "Jack" },
                       { value: "lucy", label: "Lucy" },
@@ -79,26 +79,26 @@ const AntPOC: NextPage = () => {
                   />
                   <Select
                     defaultValue="lucy"
-                    style={{ width: 120 }}
+                    className="w-32"
                     disabled
                     options={[{ value: "lucy", label: "Lucy" }]}
                   />
                   <Select
                     defaultValue="lucy"
-                    style={{ width: 120 }}
+                    className="w-32"
                     loading
                     options={[{ value: "lucy", label: "Lucy" }]}
                   />
                   <Select
                     defaultValue="lucy"
-                    style={{ width: 120 }}
+                    className="w-32"
                     allowClear
                     options={[{ value: "lucy", label: "Lucy" }]}
                   />
                   <Select
                     mode="multiple"
                     allowClear
-                    style={{ width: "100%" }}
+                    className="w-full"
                     placeholder="Please select"
                     defaultValue={["a10", "c12"]}
                     options={options}
@@ -106,7 +106,7 @@ const AntPOC: NextPage = () => {
                   <Select
                     mode="multiple"
                     disabled
-                    style={{ width: "100%" }}
+                    className="w-full"
                     placeholder="Please select"
                     defaultValue={["a10", "c12"]}
                     options={options}
@@ -118,7 +118,7 @@ const AntPOC: NextPage = () => {
           <br />
           <Row gutter={16}>
             <Col span={8}>
-              <Card title="Tooltip" bordered={false} style={{ height: "100%" }}>
+              <Card title="Tooltip" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Tooltip title="prompt text">
                     <span>Tooltip will show on mouse enter.</span>
@@ -127,7 +127,7 @@ const AntPOC: NextPage = () => {
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Alert" bordered={false} style={{ height: "100%" }}>
+              <Card title="Alert" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Alert message="Success Tips" type="success" showIcon />
                   <Alert message="Informational Notes" type="info" showIcon />
@@ -137,7 +137,7 @@ const AntPOC: NextPage = () => {
               </Card>
             </Col>
             <Col span={8}>
-              <Card title="Tag" bordered={false} style={{ height: "100%" }}>
+              <Card title="Tag" bordered={false} className="h-full">
                 <Space direction="vertical">
                   <Tag color="magenta">magenta</Tag>
                   <Tag color="red">red</Tag>
