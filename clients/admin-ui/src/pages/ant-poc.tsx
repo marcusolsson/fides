@@ -11,11 +11,8 @@ import {
   AntTag as Tag,
   AntTooltip as Tooltip,
   AntTypography as Typography,
-  palette,
 } from "fidesui";
 import type { NextPage } from "next";
-
-console.log(palette.newColor);
 
 import FidesLayout from "~/features/common/Layout";
 
