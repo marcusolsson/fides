@@ -10,6 +10,7 @@ module.exports = {
   },
   rules: {
     "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off",
     "react/react-in-jsx-scope": "off",
   },
 };

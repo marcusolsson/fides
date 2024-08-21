@@ -15,7 +15,6 @@ export { Switch as AntSwitch } from "antd/lib";
 export { Select as AntSelect } from "antd/lib";
 export { Tooltip as AntTooltip } from "antd/lib";
 export { Alert as AntAlert } from "antd/lib";
-export { Tag as AntTag } from "antd/lib";
 
 /**
  * Custom Re-exports
@@ -23,6 +22,7 @@ export { Tag as AntTag } from "antd/lib";
  * Icons whose names conflict with Chakra's included icons must be explicitly listed. This makes
  * typescript happy, but eslint doesn't understand.
  */
+export * from "./palette";
 /* eslint-disable import/export */
 export { AddIcon, LinkIcon, QuestionIcon, WarningIcon } from "./icons";
 export * from "./icons";
@@ -35,6 +35,7 @@ export { extendTheme, theme } from "./FidesUITheme";
  * Custom Components
  * These components are custom to FidesUI and are not included in ChakraUI, although they may rely on ChakraUI components.
  */
+export { AntTag } from "./components/AntTag";
 export { CheckboxTree } from "./components/checkbox-tree";
 export { ClassifiedDataCategoryDropdown } from "./components/classified-data-category-dropdown";
 export type { ColumnMetadata } from "./components/column-dropdown";
