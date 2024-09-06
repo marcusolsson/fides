@@ -1,9 +1,9 @@
+/* eslint-disable no-console */
 import { CacheControl, stringify } from "cache-control-parser";
 import {
   ComponentType,
   ConsentOption,
   constructFidesRegionString,
-  debugLog,
   DEFAULT_LOCALE,
   EmptyExperience,
   fetchExperience,
@@ -19,6 +19,7 @@ import {
   loadPrivacyCenterEnvironment,
   loadServerSettings,
 } from "~/app/server-environment";
+import { debugLog } from "~/common/debugger";
 import { LOCATION_HEADERS, lookupGeolocation } from "~/common/geolocation";
 import { safeLookupPropertyId } from "~/common/property-id";
 
@@ -175,7 +176,6 @@ export default async function handler(
         fidesLocale || req.headers["accept-language"] || DEFAULT_LOCALE;
 
       debugLog(
-        environment.settings.DEBUG,
         `Fetching relevant experiences from server-side (${userLanguageString})...`,
       );
 
@@ -198,10 +198,7 @@ export default async function handler(
   }
 
   if (!geolocation) {
-    debugLog(
-      environment.settings.DEBUG,
-      "No geolocation found, unable to prefetch experience.",
-    );
+    debugLog("No geolocation found, unable to prefetch experience.");
   }
 
   // This query param is used for testing purposes only, and should not be used
@@ -269,7 +266,6 @@ export default async function handler(
   const fidesConfigJSON = JSON.stringify(fidesConfig);
 
   debugLog(
-    environment.settings.DEBUG,
     "Bundling generic fides.js & Privacy Center configuration together...",
   );
   const fidesJsFile = tcfEnabled
@@ -283,7 +279,6 @@ export default async function handler(
   let fidesGPP: string = "";
   if (gppEnabled) {
     debugLog(
-      environment.settings.DEBUG,
       `GPP extension ${
         forcedGppQuery === "true" ? "forced" : "enabled"
       }, bundling fides-ext-gpp.js...`,
@@ -383,7 +378,6 @@ async function fetchCustomFidesCss(
         throw new Error("No data returned by the server");
       }
 
-      // eslint-disable-next-line no-console
       console.log("Successfully retrieved custom-fides.css");
       autoRefresh = true;
       cachedCustomFidesCss = data;
