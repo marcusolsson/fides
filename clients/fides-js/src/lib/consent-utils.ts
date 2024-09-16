@@ -88,10 +88,9 @@ export const constructFidesRegionString = (
   geoLocation?: UserGeolocation | null,
   debug: boolean = false,
 ): string | null => {
-  debugLog(debug, "constructing geolocation...");
+  global.fidesLogger("constructing geolocation...");
   if (!geoLocation) {
-    debugLog(
-      debug,
+    global.fidesLogger(
       "cannot construct user location since geoLocation is undefined or null",
     );
     return null;
@@ -102,16 +101,15 @@ export const constructFidesRegionString = (
   ) {
     // Fides backend requires underscore deliminator
     const regionString = geoLocation.location.replace("-", "_").toLowerCase();
-    debugLog(debug, `using geolocation: ${regionString}`);
+    global.fidesLogger(`using geolocation: ${regionString}`);
     return regionString;
   }
   if (geoLocation.country && geoLocation.region) {
     const regionString = `${geoLocation.country.toLowerCase()}_${geoLocation.region.toLowerCase()}`;
-    debugLog(debug, `using geolocation: ${regionString}`);
+    global.fidesLogger(`using geolocation: ${regionString}`);
     return regionString;
   }
-  debugLog(
-    debug,
+  global.fidesLogger(
     "cannot construct user location from provided geoLocation params...",
   );
   return null;
@@ -122,22 +120,18 @@ export const constructFidesRegionString = (
  */
 export const validateOptions = (options: FidesInitOptions): boolean => {
   // Check if options is an invalid type
-  debugLog(
-    options.debug,
-    "Validating Fides consent overlay options...",
-    options,
-  );
+  global.fidesLogger("Validating Fides consent overlay options...", options);
   if (typeof options !== "object") {
     return false;
   }
 
   if (!options.fidesApiUrl) {
-    debugLog(options.debug, "Invalid options: fidesApiUrl is required!");
+    global.fidesLogger("Invalid options: fidesApiUrl is required!");
     return false;
   }
 
   if (!options.privacyCenterUrl) {
-    debugLog(options.debug, "Invalid options: privacyCenterUrl is required!");
+    global.fidesLogger("Invalid options: privacyCenterUrl is required!");
     return false;
   }
 
@@ -147,8 +141,7 @@ export const validateOptions = (options: FidesInitOptions): boolean => {
     // eslint-disable-next-line no-new
     new URL(options.fidesApiUrl);
   } catch (e) {
-    debugLog(
-      options.debug,
+    global.fidesLogger(
       "Invalid options: privacyCenterUrl or fidesApiUrl is an invalid URL!",
       options.privacyCenterUrl,
     );
@@ -183,16 +176,14 @@ export const experienceIsValid = (
   options: FidesInitOptions,
 ): boolean => {
   if (!isPrivacyExperience(effectiveExperience)) {
-    debugLog(
-      options.debug,
+    global.fidesLogger(
       "No relevant experience found. Skipping overlay initialization.",
     );
     return false;
   }
   const expConfig = effectiveExperience.experience_config;
   if (!expConfig) {
-    debugLog(
-      options.debug,
+    global.fidesLogger(
       "No experience config found for experience. Skipping overlay initialization.",
     );
     return false;
@@ -204,8 +195,7 @@ export const experienceIsValid = (
       expConfig.component === ComponentType.TCF_OVERLAY
     )
   ) {
-    debugLog(
-      options.debug,
+    global.fidesLogger(
       "No experience found with modal, banner_and_modal, or tcf_overlay component. Skipping overlay initialization.",
     );
     return false;
@@ -217,8 +207,7 @@ export const experienceIsValid = (
       effectiveExperience.privacy_notices.length > 0
     )
   ) {
-    debugLog(
-      options.debug,
+    global.fidesLogger(
       `Privacy experience has no notices. Skipping overlay initialization.`,
     );
     return false;
@@ -334,8 +323,7 @@ export const getGpcStatusFromNotice = ({
 };
 
 export const defaultShowModal = () => {
-  debugLog(
-    window.Fides.options.debug,
+  global.fidesLogger(
     "The current experience does not support displaying a modal.",
   );
 };

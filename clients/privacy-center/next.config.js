@@ -1,6 +1,9 @@
 const path = require("path");
 const { version } = require("./package.json");
 
+global.fidesLogger =
+  process.env.FIDES_PRIVACY_CENTER__DEBUG === "true" ? console.log : () => {};
+
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });

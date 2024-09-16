@@ -58,7 +58,6 @@ import {
 export type UpdateExperienceFn = (args: {
   cookie: FidesCookie;
   experience: PrivacyExperience;
-  debug?: boolean;
   isExperienceClientSideFetched: boolean;
 }) => Partial<PrivacyExperience>;
 
@@ -395,7 +394,6 @@ export const initialize = async ({
       const updatedExperience = updateExperience({
         cookie: fides.cookie!,
         experience: fides.experience,
-        debug: options.debug,
         isExperienceClientSideFetched: fetchedClientSideExperience,
       });
       debugLog(

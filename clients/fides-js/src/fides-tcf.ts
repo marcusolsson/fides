@@ -11,7 +11,6 @@ import type { TCData } from "@iabtechlabtcf/cmpapi";
 import { TCString } from "@iabtechlabtcf/core";
 
 import {
-  debugLog,
   defaultShowModal,
   FidesCookie,
   isPrivacyExperience,
@@ -51,10 +50,13 @@ import {
 } from "./lib/tcf/utils";
 import { customGetConsentPreferences } from "./services/external/preferences";
 
+type ConsoleLogParameters = Parameters<typeof console.log>;
 declare global {
+  function fidesLogger(...args: ConsoleLogParameters): void;
   interface Window {
     Fides: FidesGlobal;
     fides_overrides: FidesOptions;
+    fidesLogger: (...args: any[]) => void;
     __tcfapiLocator?: Window;
     __tcfapi?: (
       command: string,
@@ -71,17 +73,24 @@ const updateWindowFides = (fidesGlobal: FidesGlobal) => {
   if (typeof window !== "undefined") {
     window.Fides = fidesGlobal;
   }
+
+  // Set up the global debugger function if it doesn't already exist
+  if (typeof window !== "undefined" && !window.global?.fidesLogger) {
+    window.global = {
+      ...window.global,
+      // eslint-disable-next-line no-console
+      fidesLogger: fidesGlobal.options?.debug ? console.log : () => {},
+    };
+  }
 };
 
 const updateExperience = ({
   cookie,
   experience,
-  debug = false,
   isExperienceClientSideFetched,
 }: {
   cookie: FidesCookie;
   experience: PrivacyExperience;
-  debug?: boolean;
   isExperienceClientSideFetched: boolean;
 }): Partial<PrivacyExperience> => {
   if (!isExperienceClientSideFetched) {
@@ -93,8 +102,7 @@ const updateExperience = ({
   // We need the cookie.fides_string to attach user preference to an experience.
   // If this does not exist, we should assume no user preference has been given and leave the experience as is.
   if (cookie.fides_string) {
-    debugLog(
-      debug,
+    global.fidesLogger(
       "Overriding preferences from client-side fetched experience with cookie fides_string consent",
       cookie.fides_string,
     );
@@ -190,8 +198,7 @@ async function init(this: FidesGlobal, providedConfig?: FidesConfig) {
       };
       this.cookie = { ...this.cookie, ...updatedCookie };
     } catch (error) {
-      debugLog(
-        config.options.debug,
+      global.fidesLogger(
         `Could not decode tcString from ${fidesString}, it may be invalid. ${error}`,
       );
     }

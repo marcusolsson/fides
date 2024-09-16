@@ -41,7 +41,9 @@ import {
 import { renderOverlay } from "./lib/renderOverlay";
 import { customGetConsentPreferences } from "./services/external/preferences";
 
+type ConsoleLogParameters = Parameters<typeof console.log>;
 declare global {
+  function fidesLogger(...args: ConsoleLogParameters): void;
   interface Window {
     Fides: FidesGlobal;
     fides_overrides: FidesOptions;
@@ -51,13 +53,21 @@ declare global {
 const updateWindowFides = (fidesGlobal: FidesGlobal) => {
   if (typeof window !== "undefined") {
     window.Fides = fidesGlobal;
+
+    // Set up the global debugger function if it doesn't already exist
+    if (typeof window !== "undefined" && !window.global?.fidesLogger) {
+      window.global = {
+        ...window.global,
+        // eslint-disable-next-line no-console
+        fidesLogger: fidesGlobal.options?.debug ? console.log : () => {},
+      };
+    }
   }
 };
 
 const updateExperience: UpdateExperienceFn = ({
   cookie,
   experience,
-  debug,
   isExperienceClientSideFetched,
 }): Partial<PrivacyExperience> => {
   let updatedExperience: PrivacyExperience = experience;
@@ -70,7 +80,6 @@ const updateExperience: UpdateExperienceFn = ({
     updatedExperience = updateExperienceFromCookieConsentNotices({
       experience,
       cookie,
-      debug,
     });
   }
   return updatedExperience;
@@ -144,6 +153,7 @@ async function init(this: FidesGlobal, providedConfig?: FidesConfig) {
   if (initialFides) {
     Object.assign(this, initialFides);
     updateWindowFides(this);
+
     dispatchFidesEvent("FidesInitialized", this.cookie, config.options.debug, {
       shouldShowExperience: this.shouldShowExperience(),
     });
