@@ -1,7 +1,7 @@
 import "../fides.css";
 
 import { FunctionComponent, h } from "preact";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useMemo, useState } from "preact/hooks";
 
 import { getConsentContext } from "../../lib/consent-context";
 import {
@@ -54,7 +54,7 @@ const NoticeOverlay: FunctionComponent<OverlayProps> = ({
   savedConsent,
   propertyId,
 }) => {
-  const { i18n, currentLocale, setCurrentLocale } = useI18n();
+  const { i18n, currentLocale } = useI18n();
 
   // TODO (PROD-1792): restore useMemo here but ensure that saved changes are respected
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,12 +74,6 @@ const NoticeOverlay: FunctionComponent<OverlayProps> = ({
     }
     return [];
   };
-
-  useEffect(() => {
-    if (!currentLocale && i18n.locale) {
-      setCurrentLocale(i18n.locale);
-    }
-  }, [currentLocale, i18n.locale, setCurrentLocale]);
 
   /**
    * Determine which ExperienceConfig translation is being used based on the

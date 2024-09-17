@@ -3,7 +3,6 @@ import { ReactNode } from "preact/compat";
 import {
   Dispatch,
   StateUpdater,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -28,16 +27,7 @@ interface I18nProviderProps {
   children: ReactNode;
 }
 export const I18nProvider = ({ i18nInstance, children }: I18nProviderProps) => {
-  const [currentLocale, setCurrentLocale] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const onSetCurrentLocale = useCallback(
-    (locale: string) => {
-      i18nInstance.activate(locale);
-      setCurrentLocale(locale);
-    },
-    [i18nInstance, setCurrentLocale],
-  );
 
   useEffect(() => {
     const icon = document.getElementById(FIDES_I18N_ICON);
@@ -51,12 +41,12 @@ export const I18nProvider = ({ i18nInstance, children }: I18nProviderProps) => {
   const value: I18nContextProps = useMemo(
     () => ({
       i18n: i18nInstance,
-      currentLocale,
-      setCurrentLocale: onSetCurrentLocale,
+      currentLocale: i18nInstance.locale,
+      setCurrentLocale: i18nInstance.activate,
       isLoading,
       setIsLoading,
     }),
-    [i18nInstance, currentLocale, onSetCurrentLocale, isLoading],
+    [i18nInstance, isLoading],
   );
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };

@@ -54,12 +54,7 @@ export const TcfOverlay = ({
   savedConsent,
   propertyId,
 }: TcfOverlayProps) => {
-  const {
-    i18n,
-    currentLocale,
-    setCurrentLocale,
-    setIsLoading: setIsI18nLoading,
-  } = useI18n();
+  const { i18n, setCurrentLocale, setIsLoading: setIsI18nLoading } = useI18n();
   const minExperienceLocale =
     experienceMinimal?.experience_config?.translations?.[0]?.language;
   const defaultLocale = i18n.getDefaultLocale();
@@ -68,13 +63,6 @@ export const TcfOverlay = ({
     experienceMinimal.available_locales || [],
     i18n.getDefaultLocale(),
   );
-
-  useEffect(() => {
-    if (!currentLocale) {
-      // initialize the i18n locale using the minimal experience
-      setCurrentLocale(minExperienceLocale);
-    }
-  }, [currentLocale, minExperienceLocale, setCurrentLocale]);
 
   const { gvlTranslations, setGvlTranslations } = useGvl();
   const loadGVLTranslations = async (locale: string) => {
