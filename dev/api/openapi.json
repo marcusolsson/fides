@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "fides",
-    "version": "2.45.0"
+    "version": "2.45.1b0.post0.dev632"
   },
   "paths": {
     "/api/v1/data_category": {
@@ -42,13 +42,13 @@
           "DataCategory"
         ],
         "summary": "Update",
-        "description": "Update a resource by its fides_key.\n\nThe `is_default` field cannot be updated and will respond\nwith a `403 Forbidden` if attempted.",
-        "operationId": "update_api_v1_data_category_put",
+        "description": "Update a data category. Ensures updates to \"active\" are appropriately cascaded.",
+        "operationId": "Update_api_v1_data_category_put",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataCategory"
+                "$ref": "#/components/schemas/DataCategoryCreateOrUpdate"
               }
             }
           },
@@ -61,20 +61,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DataCategory"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "data_category",
-                    "fides_key": "example.key"
-                  }
                 }
               }
             }
@@ -103,13 +89,13 @@
           "DataCategory"
         ],
         "summary": "Create",
-        "description": "Create a resource.\n\nPayloads with an is_default field can only be set to False,\nwill return a `403 Forbidden`.",
+        "description": "Create a data category",
         "operationId": "Create_api_v1_data_category_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataCategory"
+                "$ref": "#/components/schemas/DataCategoryCreateOrUpdate"
               }
             }
           },
@@ -122,20 +108,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DataCategory"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "data_category",
-                    "fides_key": "example.key"
-                  }
                 }
               }
             }
@@ -457,13 +429,13 @@
           "DataSubject"
         ],
         "summary": "Create",
-        "description": "Create a resource.\n\nPayloads with an is_default field can only be set to False,\nwill return a `403 Forbidden`.",
+        "description": "Create a data subject",
         "operationId": "Create_api_v1_data_subject_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataSubject"
+                "$ref": "#/components/schemas/DataSubjectCreateOrUpdate"
               }
             }
           },
@@ -476,20 +448,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DataSubject"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "data_subject",
-                    "fides_key": "example.key"
-                  }
                 }
               }
             }
@@ -750,13 +708,13 @@
           "DataUse"
         ],
         "summary": "Update",
-        "description": "Update a resource by its fides_key.\n\nThe `is_default` field cannot be updated and will respond\nwith a `403 Forbidden` if attempted.",
-        "operationId": "update_api_v1_data_use_put",
+        "description": "Update a data use. Ensures updates to \"active\" are appropriately cascaded.",
+        "operationId": "Update_api_v1_data_use_put",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataUse"
+                "$ref": "#/components/schemas/DataUseCreateOrUpdate"
               }
             }
           },
@@ -769,20 +727,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DataUse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "data_use",
-                    "fides_key": "example.key"
-                  }
                 }
               }
             }
@@ -811,13 +755,13 @@
           "DataUse"
         ],
         "summary": "Create",
-        "description": "Create a resource.\n\nPayloads with an is_default field can only be set to False,\nwill return a `403 Forbidden`.",
+        "description": "Create a data use. Updates existing data use if data use with name already exists and is disabled.",
         "operationId": "Create_api_v1_data_use_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DataUse"
+                "$ref": "#/components/schemas/DataUseCreateOrUpdate"
               }
             }
           },
@@ -830,20 +774,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DataUse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "data_use",
-                    "fides_key": "example.key"
-                  }
                 }
               }
             }
@@ -1062,483 +992,6 @@
             "OAuth2ClientCredentialsBearer": [
               "data_use:create",
               "data_use:update"
-            ]
-          }
-        ]
-      }
-    },
-    "/api/v1/dataset": {
-      "post": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "Create",
-        "description": "Create a resource.\n\nPayloads with an is_default field can only be set to False,\nwill return a `403 Forbidden`.",
-        "operationId": "Create_api_v1_dataset_post",
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "ctl_dataset:create"
-            ]
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Dataset"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dataset"
-                }
-              }
-            }
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "dataset",
-                    "fides_key": "example.key"
-                  }
-                }
-              }
-            },
-            "description": "Forbidden"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "Update",
-        "description": "Update a resource by its fides_key.\n\nThe `is_default` field cannot be updated and will respond\nwith a `403 Forbidden` if attempted.",
-        "operationId": "update_api_v1_dataset_put",
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "ctl_dataset:update"
-            ]
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Dataset"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dataset"
-                }
-              }
-            }
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "dataset",
-                    "fides_key": "example.key"
-                  }
-                }
-              }
-            },
-            "description": "Forbidden"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "List Datasets (Optionally Paginated)",
-        "description": "Get a list of all of the Datasets.\nIf any pagination parameters (size or page) are provided, then the response will be paginated.\nOtherwise all Datasets will be returned (this may be a slow operation if there are many datasets,\nso using the pagination parameters is recommended).\nProvided filters (search, data_categories, exclude_saas_datasets, only_unlinked_datasets) will be applied,\nreturning only the datasets that match ALL of the filters.",
-        "operationId": "List_datasets__optionally_paginated__api_v1_dataset_get",
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "dataset:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "size",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer",
-                  "maximum": 100,
-                  "minimum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Size"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer",
-                  "minimum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Page"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Search"
-            }
-          },
-          {
-            "name": "data_categories",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Data Categories"
-            }
-          },
-          {
-            "name": "exclude_saas_datasets",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "title": "Exclude Saas Datasets"
-            }
-          },
-          {
-            "name": "only_unlinked_datasets",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "title": "Only Unlinked Datasets"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/Page_Dataset_"
-                    },
-                    {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Dataset"
-                      }
-                    }
-                  ],
-                  "title": "Response List Datasets  Optionally Paginated  Api V1 Dataset Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/dataset/{fides_key}": {
-      "get": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "Get",
-        "description": "Get a resource by its fides_key.",
-        "operationId": "get_api_v1_dataset__fides_key__get",
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "ctl_dataset:read"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "fides_key",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Fides Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dataset"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "Delete",
-        "description": "Delete a resource by its fides_key.\n\nResources that have `is_default=True` cannot be deleted and will respond\nwith a `403 Forbidden`.",
-        "operationId": "delete_api_v1_dataset__fides_key__delete",
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "ctl_dataset:delete"
-            ]
-          }
-        ],
-        "parameters": [
-          {
-            "name": "fides_key",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Fides Key"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "Response Delete Api V1 Dataset  Fides Key  Delete"
-                }
-              }
-            }
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "dataset",
-                    "fides_key": "example.key"
-                  }
-                }
-              }
-            },
-            "description": "Forbidden"
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/dataset/upsert": {
-      "post": {
-        "tags": [
-          "Dataset"
-        ],
-        "summary": "Upsert",
-        "description": "For any resource in `resources` that already exists in the database,\nupdate the resource by its `fides_key`. Otherwise, create a new resource.\n\nResponds with a `201 Created` if even a single resource in `resources`\ndid not previously exist. Otherwise, responds with a `200 OK`.\n\nThe `is_default` field cannot be updated and will respond\nwith a `403 Forbidden` if attempted.",
-        "operationId": "upsert_api_v1_dataset_upsert_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "items": {
-                  "$ref": "#/components/schemas/Dataset"
-                },
-                "type": "array",
-                "title": "Resources"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "title": "Response Upsert Api V1 Dataset Upsert Post"
-                },
-                "example": {
-                  "message": "Upserted 3 dataset(s)",
-                  "inserted": 0,
-                  "updated": 3
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Upserted 3 dataset(s)",
-                  "inserted": 1,
-                  "updated": 2
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "example": {
-                  "detail": {
-                    "error": "user does not have permission to modify this resource",
-                    "resource_type": "DataCategory",
-                    "fides_key": "example.key"
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2ClientCredentialsBearer": [
-              "ctl_dataset:create",
-              "ctl_dataset:update"
             ]
           }
         ]
@@ -2960,13 +2413,22 @@
               "schema": {
                 "anyOf": [
                   {
-                    "$ref": "#/components/schemas/MongoDBDocsSchema"
+                    "$ref": "#/components/schemas/BigQueryDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
+                    "$ref": "#/components/schemas/DatahubDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/MySQLDocsSchema"
+                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/EmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FidesDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/GoogleCloudSQLMySQLDocsSchema"
@@ -2975,49 +2437,55 @@
                     "$ref": "#/components/schemas/GoogleCloudSQLPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/RedshiftDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/MSSQLDocsSchema"
+                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/MariaDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/BigQueryDocsSchema"
+                    "$ref": "#/components/schemas/MongoDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SaaSSchema"
+                    "$ref": "#/components/schemas/MSSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/EmailDocsSchema"
+                    "$ref": "#/components/schemas/MySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
+                    "$ref": "#/components/schemas/OktaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/FidesDocsSchema"
+                    "$ref": "#/components/schemas/RDSMySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                    "$ref": "#/components/schemas/RDSPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                    "$ref": "#/components/schemas/RedshiftDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/S3DocsSchema"
                   },
                   {
+                    "$ref": "#/components/schemas/SaaSSchema"
+                  },
+                  {
                     "$ref": "#/components/schemas/ScyllaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WebsiteSchema"
                   }
                 ],
                 "title": "Unvalidated Secrets"
@@ -3169,7 +2637,7 @@
           "System"
         ],
         "summary": "List Systems (Optionally Paginated)",
-        "description": "Get a list of all of the Systems.\nIf any pagination parameters (size or page) are provided, then the response will be paginated\n& provided filters (search, taxonomy fields) will be applied.\nOtherwise all Systems will be returned (this may be a slow operation if there are many systems,\nso using the pagination parameters is recommended).",
+        "description": "Get a list of all of the Systems.\nIf any parameters or filters are provided the response will be paginated and/or filtered.\nOtherwise all Systems will be returned (this may be a slow operation if there are many systems,\nso using the pagination parameters is recommended).",
         "operationId": "List_systems__optionally_paginated__api_v1_system_get",
         "security": [
           {
@@ -3285,6 +2753,23 @@
                 }
               ],
               "title": "Data Subjects"
+            }
+          },
+          {
+            "name": "show_deleted",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "title": "Show Deleted"
             }
           }
         ],
@@ -3476,6 +2961,71 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SystemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/system/hidden": {
+      "patch": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Patch Hidden",
+        "description": "Patch the hidden status of a list of systems. Request body must be a list of system Fides keys.",
+        "operationId": "patch_hidden_api_v1_system_hidden_patch",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "system:update"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hidden",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "title": "Hidden"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "title": "Fides Keys"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Hidden Api V1 System Hidden Patch"
                 }
               }
             }
@@ -4277,13 +3827,22 @@
               "schema": {
                 "anyOf": [
                   {
-                    "$ref": "#/components/schemas/MongoDBDocsSchema"
+                    "$ref": "#/components/schemas/BigQueryDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
+                    "$ref": "#/components/schemas/DatahubDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/MySQLDocsSchema"
+                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/EmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FidesDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/GoogleCloudSQLMySQLDocsSchema"
@@ -4292,49 +3851,55 @@
                     "$ref": "#/components/schemas/GoogleCloudSQLPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/RedshiftDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/MSSQLDocsSchema"
+                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/MariaDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/BigQueryDocsSchema"
+                    "$ref": "#/components/schemas/MongoDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SaaSSchema"
+                    "$ref": "#/components/schemas/MSSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/EmailDocsSchema"
+                    "$ref": "#/components/schemas/MySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
+                    "$ref": "#/components/schemas/OktaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/FidesDocsSchema"
+                    "$ref": "#/components/schemas/RDSMySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                    "$ref": "#/components/schemas/RDSPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                    "$ref": "#/components/schemas/RedshiftDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/S3DocsSchema"
                   },
                   {
+                    "$ref": "#/components/schemas/SaaSSchema"
+                  },
+                  {
                     "$ref": "#/components/schemas/ScyllaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WebsiteSchema"
                   }
                 ],
                 "title": "Unvalidated Secrets"
@@ -4414,13 +3979,22 @@
               "schema": {
                 "anyOf": [
                   {
-                    "$ref": "#/components/schemas/MongoDBDocsSchema"
+                    "$ref": "#/components/schemas/BigQueryDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
+                    "$ref": "#/components/schemas/DatahubDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/MySQLDocsSchema"
+                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/EmailDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FidesDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/GoogleCloudSQLMySQLDocsSchema"
@@ -4429,49 +4003,55 @@
                     "$ref": "#/components/schemas/GoogleCloudSQLPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/RedshiftDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
-                  },
-                  {
-                    "$ref": "#/components/schemas/MSSQLDocsSchema"
+                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/MariaDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/BigQueryDocsSchema"
+                    "$ref": "#/components/schemas/MongoDBDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SaaSSchema"
+                    "$ref": "#/components/schemas/MSSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/EmailDocsSchema"
+                    "$ref": "#/components/schemas/MySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/ManualWebhookDocsSchema"
+                    "$ref": "#/components/schemas/OktaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                    "$ref": "#/components/schemas/PostgreSQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/FidesDocsSchema"
+                    "$ref": "#/components/schemas/RDSMySQLDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                    "$ref": "#/components/schemas/RDSPostgresDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                    "$ref": "#/components/schemas/RedshiftDocsSchema"
                   },
                   {
                     "$ref": "#/components/schemas/S3DocsSchema"
                   },
                   {
+                    "$ref": "#/components/schemas/SaaSSchema"
+                  },
+                  {
                     "$ref": "#/components/schemas/ScyllaDocsSchema"
                   },
                   {
-                    "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                    "$ref": "#/components/schemas/SnowflakeDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/SovrnDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/TimescaleDocsSchema"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WebsiteSchema"
                   }
                 ],
                 "title": "Unvalidated Secrets"
@@ -5067,6 +4647,69 @@
       }
     },
     "/api/v1/connection/{connection_key}/datasetconfig": {
+      "put": {
+        "tags": [
+          "Dataset Configs"
+        ],
+        "summary": "Put Dataset Configs",
+        "description": "Endpoint to create, update, or remove DatasetConfigs by passing in pairs of:\n1) A DatasetConfig fides_key\n2) The corresponding CtlDataset fides_key which stores the bulk of the actual dataset\n\nThe CtlDataset contents are retrieved for extra validation before linking this\nto the DatasetConfig.\n\nNote: Any existing DatasetConfigs not specified in the dataset pairs will be deleted.",
+        "operationId": "put_dataset_configs_api_v1_connection__connection_key__datasetconfig_put",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "dataset:create_or_update"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "connection_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DatasetConfigCtlDataset"
+                },
+                "maxItems": 50,
+                "title": "Dataset Pairs"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkPutDataset"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "tags": [
           "Dataset Configs"
@@ -5273,6 +4916,7 @@
         "summary": "Get Datasets",
         "description": "Returns all CTL datasets attached to the ConnectionConfig via the Dataset Config.\n\nSoon to be deprecated.",
         "operationId": "get_datasets_api_v1_connection__connection_key__dataset_get",
+        "deprecated": true,
         "security": [
           {
             "OAuth2ClientCredentialsBearer": [
@@ -5338,14 +4982,65 @@
         }
       }
     },
-    "/api/v1/connection/{connection_key}/dataset/{fides_key}": {
+    "/api/v1/yml/connection/{connection_key}/dataset": {
+      "patch": {
+        "tags": [
+          "Dataset Configs"
+        ],
+        "summary": "Patch Yaml Datasets",
+        "description": "Bulk create or update datasets from YAML format.\nAccepts application/x-yaml content type.",
+        "operationId": "patch_yaml_datasets_api_v1_yml_connection__connection_key__dataset_patch",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "dataset:create_or_update"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "connection_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkPutDataset"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connection/{connection_key}/dataset/{dataset_key}": {
       "get": {
         "tags": [
           "Dataset Configs"
         ],
         "summary": "Get Dataset",
         "description": "Returns a single ctl dataset linked to the given DatasetConfig.\n\nSoon to be deprecated",
-        "operationId": "get_dataset_api_v1_connection__connection_key__dataset__fides_key__get",
+        "operationId": "get_dataset_api_v1_connection__connection_key__dataset__dataset_key__get",
+        "deprecated": true,
         "security": [
           {
             "OAuth2ClientCredentialsBearer": [
@@ -5355,12 +5050,12 @@
         ],
         "parameters": [
           {
-            "name": "fides_key",
+            "name": "dataset_key",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Fides Key"
+              "title": "Dataset Key"
             }
           },
           {
@@ -5402,7 +5097,7 @@
         ],
         "summary": "Delete Dataset",
         "description": "Removes the DatasetConfig based on the given key.",
-        "operationId": "delete_dataset_api_v1_connection__connection_key__dataset__fides_key__delete",
+        "operationId": "delete_dataset_api_v1_connection__connection_key__dataset__dataset_key__delete",
         "security": [
           {
             "OAuth2ClientCredentialsBearer": [
@@ -5412,12 +5107,12 @@
         ],
         "parameters": [
           {
-            "name": "fides_key",
+            "name": "dataset_key",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Fides Key"
+              "title": "Dataset Key"
             }
           },
           {
@@ -5447,14 +5142,14 @@
         }
       }
     },
-    "/api/v1/connection/{connection_key}/datasetconfig/{fides_key}": {
+    "/api/v1/connection/{connection_key}/datasetconfig/{dataset_key}": {
       "get": {
         "tags": [
           "Dataset Configs"
         ],
         "summary": "Get Dataset Config",
         "description": "Returns the specific Dataset Config linked to the Connection Config.",
-        "operationId": "get_dataset_config_api_v1_connection__connection_key__datasetconfig__fides_key__get",
+        "operationId": "get_dataset_config_api_v1_connection__connection_key__datasetconfig__dataset_key__get",
         "security": [
           {
             "OAuth2ClientCredentialsBearer": [
@@ -5464,12 +5159,12 @@
         ],
         "parameters": [
           {
-            "name": "fides_key",
+            "name": "dataset_key",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Fides Key"
+              "title": "Dataset Key"
             }
           },
           {
@@ -5555,6 +5250,209 @@
                     "$ref": "#/components/schemas/Dataset"
                   },
                   "title": "Response Get Ctl Datasets Api V1 Filter Dataset Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connection/{connection_key}/dataset/{dataset_key}/inputs": {
+      "get": {
+        "tags": [
+          "Dataset Configs"
+        ],
+        "summary": "Dataset Identities And References",
+        "description": "Returns a dictionary containing the immediate identity and dataset reference\ndependencies for the given dataset.",
+        "operationId": "dataset_identities_and_references_api_v1_connection__connection_key__dataset__dataset_key__inputs_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "dataset:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Key"
+            }
+          },
+          {
+            "name": "connection_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Dataset Identities And References Api V1 Connection  Connection Key  Dataset  Dataset Key  Inputs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connection/{connection_key}/dataset/{dataset_key}/reachability": {
+      "get": {
+        "tags": [
+          "Dataset Configs"
+        ],
+        "summary": "Dataset Reachability",
+        "description": "Returns a dictionary containing the immediate identity and dataset reference\ndependencies for the given dataset.",
+        "operationId": "dataset_reachability_api_v1_connection__connection_key__dataset__dataset_key__reachability_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "dataset:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Key"
+            }
+          },
+          {
+            "name": "connection_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Key"
+            }
+          },
+          {
+            "name": "policy_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Policy Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetReachability"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connection/{connection_key}/dataset/{dataset_key}/test": {
+      "post": {
+        "tags": [
+          "Dataset Configs"
+        ],
+        "summary": "Test Connection Datasets",
+        "operationId": "test_connection_datasets_api_v1_connection__connection_key__dataset__dataset_key__test_post",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "dataset:test"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Key"
+            }
+          },
+          {
+            "name": "connection_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connection Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatasetTestRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestPrivacyRequest"
                 }
               }
             }
@@ -8305,6 +8203,23 @@
             }
           },
           {
+            "name": "include_deleted_requests",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "title": "Include Deleted Requests"
+            }
+          },
+          {
             "name": "sort_field",
             "in": "query",
             "required": false,
@@ -9405,7 +9320,7 @@
           "Privacy Requests"
         ],
         "summary": "Privacy Request Data Transfer",
-        "description": "Transfer access request iinformation to the parent server.",
+        "description": "Transfer access request information to the parent server.",
         "operationId": "privacy_request_data_transfer_api_v1_privacy_request_transfer__privacy_request_id___rule_key__get",
         "security": [
           {
@@ -9676,6 +9591,306 @@
         ]
       }
     },
+    "/api/v1/privacy-request/bulk/soft-delete": {
+      "post": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Bulk Soft Delete Privacy Requests",
+        "description": "Soft delete a list of privacy requests. The requests' deleted_at field will be populated with the current datetime\nand its deleted_by field will be populated with the user_id of the user who initiated the deletion. Returns an\nobject with the list of successfully deleted privacy requests and the list of failed deletions.",
+        "operationId": "bulk_soft_delete_privacy_requests_api_v1_privacy_request_bulk_soft_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewPrivacyRequestIds"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkSoftDeletePrivacyRequests"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request:delete"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/v1/privacy-request/{privacy_request_id}/soft-delete": {
+      "post": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Soft Delete Privacy Request",
+        "description": "Endpoint for soft deleting a privacy request. The request's deleted_at field will be populated with the current datetime\nand its deleted_by field will be populated with the user_id of the user who initiated the deletion.",
+        "operationId": "soft_delete_privacy_request_api_v1_privacy_request__privacy_request_id__soft_delete_post",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request:delete"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "privacy_request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Privacy Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/privacy-request/{privacy_request_id}/access-results": {
+      "get": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Get Access Results Urls",
+        "description": "Endpoint for retrieving access results URLs for a privacy request.",
+        "operationId": "get_access_results_urls_api_v1_privacy_request__privacy_request_id__access_results_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request-access-results:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "privacy_request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Privacy Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivacyRequestAccessResults"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/privacy-request/{privacy_request_id}/filtered-results": {
+      "get": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Get Test Privacy Request Results",
+        "description": "Get filtered results for a test privacy request and update its status if complete.",
+        "operationId": "get_test_privacy_request_results_api_v1_privacy_request__privacy_request_id__filtered_results_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request-access-results:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "privacy_request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Privacy Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilteredPrivacyRequestResults"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/privacy-request/{privacy_request_id}/resubmit": {
+      "post": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Resubmit Privacy Request",
+        "operationId": "resubmit_privacy_request_api_v1_privacy_request__privacy_request_id__resubmit_post",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request:create"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "privacy_request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Privacy Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrivacyRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/privacy-request/{privacy_request_id}/logs": {
+      "get": {
+        "tags": [
+          "Privacy Requests"
+        ],
+        "summary": "Get Test Privacy Request Logs",
+        "description": "Get logs for a test privacy request.",
+        "operationId": "get_test_privacy_request_logs_api_v1_privacy_request__privacy_request_id__logs_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "privacy-request-access-results:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "privacy_request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Privacy Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LogEntry"
+                  },
+                  "title": "Response Get Test Privacy Request Logs Api V1 Privacy Request  Privacy Request Id  Logs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/id-verification/config": {
       "get": {
         "tags": [
@@ -9922,7 +10137,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/StorageSecretsS3Docs"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/StorageSecretsS3Docs"
+                  },
+                  {
+                    "$ref": "#/components/schemas/StorageSecretsGCSDocs"
+                  }
+                ],
+                "title": "Unvalidated Storage Secrets"
               }
             }
           }
@@ -10262,7 +10485,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/StorageSecretsS3Docs"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/StorageSecretsS3Docs"
+                  },
+                  {
+                    "$ref": "#/components/schemas/StorageSecretsGCSDocs"
+                  }
+                ],
+                "title": "Unvalidated Storage Secrets"
               }
             }
           }
@@ -10780,6 +11011,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/MessagingServiceSecretsMailchimpTransactionalDocs"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MessagingServiceSecretsAWS_SESDocs"
                   }
                 ],
                 "title": "Unvalidated Messaging Secrets"
@@ -10854,6 +11088,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/MessagingServiceSecretsMailchimpTransactionalDocs"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MessagingServiceSecretsAWS_SESDocs"
                   }
                 ],
                 "title": "Unvalidated Messaging Secrets"
@@ -12304,26 +12541,6 @@
         "operationId": "accept_user_invite_api_v1_user_accept_invite_post",
         "parameters": [
           {
-            "name": "config_path_override",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "",
-              "title": "Config Path Override"
-            }
-          },
-          {
-            "name": "verbose",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false,
-              "title": "Verbose"
-            }
-          },
-          {
             "name": "username",
             "in": "query",
             "required": true,
@@ -12847,6 +13064,35 @@
         }
       }
     },
+    "/api/v1/worker-stats": {
+      "get": {
+        "tags": [
+          "Worker Stats"
+        ],
+        "summary": "Get Worker Stats",
+        "description": "Get statistics about Celery queues and workers.\n\nReturns information about task queues and worker states in the Celery system:\n- Queue statistics: Number of pending tasks in each Redis-backed queue\n- Worker statistics: Current state of each Celery worker including:\n    - Active task: Currently executing task, if any\n    - Reserved tasks: Tasks reserved by a worker but not yet started\n    - Registered tasks: Tasks this worker is configured to accept",
+        "operationId": "get_worker_stats_api_v1_worker_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkerStats"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "worker-stats:read"
+            ]
+          }
+        ]
+      }
+    },
     "/api/v1/admin/db/{action}": {
       "post": {
         "tags": [
@@ -13036,6 +13282,474 @@
         }
       }
     },
+    "/api/v1/dataset": {
+      "post": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Create Dataset",
+        "description": "Create a new dataset",
+        "operationId": "Create_dataset_api_v1_dataset_post",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:create"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dataset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dataset"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Update Dataset",
+        "description": "Update an existing dataset",
+        "operationId": "Update_dataset_api_v1_dataset_put",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:update"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Dataset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dataset"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "List Datasets (Optionally Paginated)",
+        "description": "Get a list of all of the Datasets.\nIf any pagination parameters (size or page) are provided, then the response will be paginated.\nOtherwise all Datasets will be returned (this may be a slow operation if there are many datasets,\nso using the pagination parameters is recommended).\nProvided filters (search, data_categories, exclude_saas_datasets, only_unlinked_datasets) will be applied,\nreturning only the datasets that match ALL of the filters.",
+        "operationId": "List_datasets__optionally_paginated__api_v1_dataset_get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Size"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Page"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "data_categories",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Data Categories"
+            }
+          },
+          {
+            "name": "exclude_saas_datasets",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "title": "Exclude Saas Datasets"
+            }
+          },
+          {
+            "name": "only_unlinked_datasets",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "title": "Only Unlinked Datasets"
+            }
+          },
+          {
+            "name": "connection_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ConnectionType"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Connection Type"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": false,
+              "title": "Minimal"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Page_DatasetResponse_"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DatasetResponse"
+                      }
+                    }
+                  ],
+                  "title": "Response List Datasets  Optionally Paginated  Api V1 Dataset Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dataset/{fides_key}": {
+      "get": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Get Dataset",
+        "description": "Get a single dataset by fides key",
+        "operationId": "Get_dataset_api_v1_dataset__fides_key__get",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fides_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Fides Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dataset"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Delete Dataset",
+        "description": "Delete a dataset by fides key",
+        "operationId": "Delete_dataset_api_v1_dataset__fides_key__delete",
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:delete"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fides_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Fides Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dataset/upsert": {
+      "post": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Upsert Datasets",
+        "description": "For any dataset in `datasets` that already exists in the database,\nupdate the dataset by its `fides_key`. Otherwise, create a new dataset.\n\nResponds with a `201 Created` if even a single dataset in `datasets`\ndid not previously exist. Otherwise, responds with a `200 OK`.",
+        "operationId": "upsert_datasets_api_v1_dataset_upsert_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/Dataset"
+                },
+                "type": "array",
+                "title": "Datasets"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Upsert Datasets Api V1 Dataset Upsert Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:create",
+              "ctl_dataset:update"
+            ]
+          }
+        ]
+      }
+    },
+    "/api/v1/dataset/clean": {
+      "get": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "Clean Datasets",
+        "description": "Clean up names of datasets and upsert them.",
+        "operationId": "clean_datasets_api_v1_dataset_clean_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Dataset"
+                  },
+                  "type": "array",
+                  "title": "Response Clean Datasets Api V1 Dataset Clean Get"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true,
+        "security": [
+          {
+            "OAuth2ClientCredentialsBearer": [
+              "ctl_dataset:read"
+            ]
+          }
+        ]
+      }
+    },
     "/": {
       "get": {
         "tags": [
@@ -13221,6 +13935,17 @@
               }
             ],
             "title": "Url"
+          },
+          "error_notification_mode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorNotificationMode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "console_only"
           }
         },
         "additionalProperties": false,
@@ -13422,6 +14147,9 @@
         "type": "string",
         "enum": [
           "approved",
+          "attachment_uploaded",
+          "attachment_deleted",
+          "attachment_retrieved",
           "denied",
           "email_sent",
           "finished"
@@ -13865,21 +14593,6 @@
             "title": "Legitimate Interest Disclosure Url",
             "description": "A URL that points to the system's publicly accessible legitimate interest disclosure."
           },
-          "cookies": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Cookies"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cookies",
-            "description": "System-level cookies unassociated with a data use to deliver services and functionality"
-          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -13928,7 +14641,7 @@
                 "$ref": "#/components/schemas/fides__api__schemas__connection_configuration__connection_secrets_bigquery__KeyfileCreds"
               }
             ],
-            "title": "Keyfile Creds",
+            "title": "Keyfile creds",
             "description": "The contents of the key file that contains authentication credentials for a service account in GCP.",
             "sensitive": true
           },
@@ -13941,8 +14654,8 @@
                 "type": "null"
               }
             ],
-            "title": "BigQuery Dataset",
-            "description": "The dataset within your BigQuery project that contains the tables you want to access."
+            "title": "Dataset",
+            "description": "Only provide a dataset to scope discovery monitors and privacy request automation to a specific BigQuery dataset. In most cases, this can be left blank."
           }
         },
         "type": "object",
@@ -14230,6 +14943,30 @@
         "title": "BulkReviewResponse",
         "description": "Schema with mixed success/failure responses for Bulk Approve/Deny of PrivacyRequest responses."
       },
+      "BulkSoftDeletePrivacyRequests": {
+        "properties": {
+          "succeeded": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Succeeded"
+          },
+          "failed": {
+            "items": {
+              "$ref": "#/components/schemas/BulkUpdateFailed"
+            },
+            "type": "array",
+            "title": "Failed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "succeeded",
+          "failed"
+        ],
+        "title": "BulkSoftDeletePrivacyRequests"
+      },
       "BulkUpdateFailed": {
         "properties": {
           "message": {
@@ -14383,6 +15120,20 @@
             ],
             "title": "After"
           },
+          "erase_after": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Erase After"
+          },
           "skip_processing": {
             "anyOf": [
               {
@@ -14394,6 +15145,27 @@
             ],
             "title": "Skip Processing",
             "default": false
+          },
+          "masking_strategy_override": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MaskingStrategyOverride"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "partitioning": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partitioning"
           }
         },
         "type": "object",
@@ -14410,6 +15182,30 @@
       },
       "ConnectionConfigurationResponse": {
         "properties": {
+          "connection_type": {
+            "$ref": "#/components/schemas/ConnectionType"
+          },
+          "secrets": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secrets"
+          },
+          "saas_config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SaaSConfigBase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "name": {
             "anyOf": [
               {
@@ -14435,9 +15231,6 @@
               }
             ],
             "title": "Description"
-          },
-          "connection_type": {
-            "$ref": "#/components/schemas/ConnectionType"
           },
           "access": {
             "$ref": "#/components/schemas/AccessLevel"
@@ -14494,27 +15287,6 @@
             ],
             "title": "Last Test Succeeded"
           },
-          "saas_config": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/SaaSConfigBase"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "secrets": {
-            "anyOf": [
-              {
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Secrets"
-          },
           "authorized": {
             "anyOf": [
               {
@@ -14544,13 +15316,13 @@
         },
         "type": "object",
         "required": [
-          "key",
           "connection_type",
+          "key",
           "access",
           "created_at"
         ],
         "title": "ConnectionConfigurationResponse",
-        "description": "Describes the returned schema for a ConnectionConfiguration."
+        "description": "Describes the returned schema for a ConnectionConfiguration.\n\nThe mixin base class ensures that `secrets` sensitive values are masked."
       },
       "ConnectionSystemTypeMap": {
         "properties": {
@@ -14637,8 +15409,9 @@
       "ConnectionType": {
         "type": "string",
         "enum": [
-          "attentive",
+          "attentive_email",
           "bigquery",
+          "datahub",
           "dynamodb",
           "fides",
           "generic_consent_email",
@@ -14653,14 +15426,18 @@
           "mongodb",
           "mssql",
           "mysql",
+          "okta",
           "postgres",
+          "rds_mysql",
+          "rds_postgres",
           "redshift",
           "s3",
           "saas",
           "scylla",
           "snowflake",
           "sovrn",
-          "timescale"
+          "timescale",
+          "website"
         ],
         "title": "ConnectionType",
         "description": "Supported types to which we can connect Fides."
@@ -15120,42 +15897,6 @@
         "title": "ContactDetails",
         "description": "The contact details information model.\n\nUsed to capture contact information for controllers, used\nas part of exporting a data map / ROPA.\n\nThis model is nested under an Organization and\npotentially under a system/dataset."
       },
-      "Cookies": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "path": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Path"
-          },
-          "domain": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Domain"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name"
-        ],
-        "title": "Cookies",
-        "description": "The Cookies resource model"
-      },
       "CoreHealthCheck": {
         "properties": {
           "webserver": {
@@ -15241,13 +15982,22 @@
           "secrets": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MongoDBDocsSchema"
+                "$ref": "#/components/schemas/BigQueryDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/PostgreSQLDocsSchema"
+                "$ref": "#/components/schemas/DatahubDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/MySQLDocsSchema"
+                "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/DynamoDBDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/EmailDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/FidesDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/GoogleCloudSQLMySQLDocsSchema"
@@ -15256,49 +16006,55 @@
                 "$ref": "#/components/schemas/GoogleCloudSQLPostgresDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/RedshiftDocsSchema"
-              },
-              {
-                "$ref": "#/components/schemas/SnowflakeDocsSchema"
-              },
-              {
-                "$ref": "#/components/schemas/MSSQLDocsSchema"
+                "$ref": "#/components/schemas/ManualWebhookDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/MariaDBDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/BigQueryDocsSchema"
+                "$ref": "#/components/schemas/MongoDBDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/SaaSSchema"
+                "$ref": "#/components/schemas/MSSQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/EmailDocsSchema"
+                "$ref": "#/components/schemas/MySQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/ManualWebhookDocsSchema"
+                "$ref": "#/components/schemas/OktaDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/TimescaleDocsSchema"
+                "$ref": "#/components/schemas/PostgreSQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/FidesDocsSchema"
+                "$ref": "#/components/schemas/RDSMySQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/SovrnDocsSchema"
+                "$ref": "#/components/schemas/RDSPostgresDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                "$ref": "#/components/schemas/RedshiftDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/S3DocsSchema"
               },
               {
+                "$ref": "#/components/schemas/SaaSSchema"
+              },
+              {
                 "$ref": "#/components/schemas/ScyllaDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                "$ref": "#/components/schemas/SnowflakeDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/SovrnDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/TimescaleDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/WebsiteSchema"
               },
               {
                 "type": "null"
@@ -15507,6 +16263,136 @@
         ],
         "title": "DataCategory"
       },
+      "DataCategoryCreateOrUpdate": {
+        "properties": {
+          "version_added": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Added",
+            "description": "The version of Fideslang in which this label was added."
+          },
+          "version_deprecated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Deprecated",
+            "description": "The version of Fideslang in which this label was deprecated."
+          },
+          "replaced_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replaced By",
+            "description": "The new name, if applicable, for this label after deprecation."
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Denotes whether the resource is part of the default taxonomy or not.",
+            "default": false
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active",
+            "default": true
+          },
+          "fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fides Key"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "organization_fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization Fides Key",
+            "default": "default_organization"
+          },
+          "parent_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Key"
+          }
+        },
+        "type": "object",
+        "title": "DataCategoryCreateOrUpdate"
+      },
       "DataFlow": {
         "properties": {
           "fides_key": {
@@ -15681,6 +16567,146 @@
           "fides_key"
         ],
         "title": "DataSubject"
+      },
+      "DataSubjectCreateOrUpdate": {
+        "properties": {
+          "version_added": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Added",
+            "description": "The version of Fideslang in which this label was added."
+          },
+          "version_deprecated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Deprecated",
+            "description": "The version of Fideslang in which this label was deprecated."
+          },
+          "replaced_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replaced By",
+            "description": "The new name, if applicable, for this label after deprecation."
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Denotes whether the resource is part of the default taxonomy or not.",
+            "default": false
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active",
+            "default": true
+          },
+          "fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fides Key"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "organization_fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization Fides Key",
+            "default": "default_organization"
+          },
+          "rights": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DataSubjectRights"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "automated_decisions_or_profiling": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Automated Decisions Or Profiling"
+          }
+        },
+        "type": "object",
+        "title": "DataSubjectCreateOrUpdate"
       },
       "DataSubjectRights": {
         "properties": {
@@ -15862,6 +16888,136 @@
         ],
         "title": "DataUse"
       },
+      "DataUseCreateOrUpdate": {
+        "properties": {
+          "version_added": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Added",
+            "description": "The version of Fideslang in which this label was added."
+          },
+          "version_deprecated": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Deprecated",
+            "description": "The version of Fideslang in which this label was deprecated."
+          },
+          "replaced_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replaced By",
+            "description": "The new name, if applicable, for this label after deprecation."
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default",
+            "description": "Denotes whether the resource is part of the default taxonomy or not.",
+            "default": false
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active",
+            "default": true
+          },
+          "fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fides Key"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "organization_fides_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization Fides Key",
+            "default": "default_organization"
+          },
+          "parent_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Key"
+          }
+        },
+        "type": "object",
+        "title": "DataUseCreateOrUpdate"
+      },
       "DatabaseConfig": {
         "properties": {
           "connection_string": {
@@ -15900,6 +17056,46 @@
         ],
         "title": "DatabaseHealthCheck",
         "description": "Database Healthcheck Schema"
+      },
+      "DatahubDocsSchema": {
+        "properties": {
+          "datahub_server_url": {
+            "type": "string",
+            "minLength": 1,
+            "format": "uri",
+            "title": "DataHub server URL",
+            "description": "The URL of your DataHub server."
+          },
+          "datahub_token": {
+            "type": "string",
+            "title": "DataHub token",
+            "description": "The token used to authenticate with your DataHub server.",
+            "sensitive": true
+          },
+          "frequency": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PeriodicIntegrationFrequency"
+              }
+            ],
+            "title": "Frequency",
+            "description": "The frequency at which the integration should run. Available options are daily, weekly, and monthly."
+          },
+          "glossary_node": {
+            "type": "string",
+            "title": "Glossary node",
+            "description": "The glossary node name to use on Datahub for Fides Data Categories. (e.g. FidesDataCategories)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "datahub_server_url",
+          "datahub_token",
+          "frequency",
+          "glossary_node"
+        ],
+        "title": "DatahubDocsSchema",
+        "description": "Datahub Schema for API docs."
       },
       "Dataset": {
         "properties": {
@@ -16197,11 +17393,184 @@
               }
             ],
             "title": "After"
+          },
+          "namespace": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Namespace"
           }
         },
         "type": "object",
         "title": "DatasetMetadata",
         "description": "The DatasetMetadata resource model.\n\nObject used to hold application specific metadata for a dataset"
+      },
+      "DatasetReachability": {
+        "properties": {
+          "reachable": {
+            "type": "boolean",
+            "title": "Reachable"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reachable",
+          "details"
+        ],
+        "title": "DatasetReachability",
+        "description": "Response containing reachability details for a single dataset"
+      },
+      "DatasetResponse": {
+        "properties": {
+          "fides_key": {
+            "type": "string",
+            "title": "Fides Key",
+            "description": "A unique key used to identify this resource."
+          },
+          "organization_fides_key": {
+            "type": "string",
+            "title": "Organization Fides Key",
+            "description": "Defines the Organization that this resource belongs to.",
+            "default": "default_organization"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Human-Readable name for this resource."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "A detailed description of what this resource is."
+          },
+          "meta": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meta",
+            "description": "An optional property to store any extra information for a resource. Data can be structured in any way: simple set of `key: value` pairs or deeply nested objects."
+          },
+          "data_categories": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Categories",
+            "description": "Array of Data Category resources identified by `fides_key`, that apply to all collections in the Dataset."
+          },
+          "fides_meta": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DatasetMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "\n    The DatasetMetadata resource model.\n\n    Object used to hold application specific metadata for a dataset\n    "
+          },
+          "collections": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DatasetCollection"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collections",
+            "description": "An array of objects that describe the Dataset's collections."
+          }
+        },
+        "type": "object",
+        "required": [
+          "fides_key"
+        ],
+        "title": "DatasetResponse",
+        "description": "Dataset response model for API endpoints.\n\nNote: This class extends the Dataset model from fideslang rather than having a proper\ndedicated API response model. We had to make the collections field\nOptional and allow null values to support the minimal=true parameter in API responses,\neven though collections is required in the base fideslang Dataset model."
+      },
+      "DatasetTestRequest": {
+        "properties": {
+          "policy_key": {
+            "type": "string",
+            "title": "Policy Key"
+          },
+          "identities": {
+            "$ref": "#/components/schemas/UnlabeledIdentities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "policy_key",
+          "identities"
+        ],
+        "title": "DatasetTestRequest",
+        "description": "The policy key and inputs required to run a dataset test."
       },
       "DatasetTraversalDetails": {
         "properties": {
@@ -16656,6 +18025,14 @@
         ],
         "title": "Endpoint",
         "description": "A collection of read/update/delete requests which corresponds to a FidesDataset collection (by name)"
+      },
+      "ErrorNotificationMode": {
+        "type": "string",
+        "enum": [
+          "console_only",
+          "toast"
+        ],
+        "title": "ErrorNotificationMode"
       },
       "Evaluation": {
         "properties": {
@@ -17175,11 +18552,48 @@
             ],
             "title": "Custom Request Field",
             "description": "Optionally specify that a field may be used as a custom request field in DSRs. The value is the name of the field in the DSR."
+          },
+          "masking_strategy_override": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FieldMaskingStrategyOverride"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optionally specify a masking strategy override for this field."
           }
         },
         "type": "object",
         "title": "FidesMeta",
         "description": "Supplementary metadata used by the Fides application for additional features."
+      },
+      "FieldMaskingStrategyOverride": {
+        "properties": {
+          "strategy": {
+            "type": "string",
+            "title": "Strategy"
+          },
+          "configuration": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Configuration",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "strategy"
+        ],
+        "title": "FieldMaskingStrategyOverride",
+        "description": "Overrides field-level masking strategies."
       },
       "FieldsAffectedResponse": {
         "properties": {
@@ -17228,6 +18642,44 @@
         ],
         "title": "FieldsAffectedResponse",
         "description": "Schema detailing the individual fields affected by a particular query detailed in the ExecutionLog"
+      },
+      "FilteredPrivacyRequestResults": {
+        "properties": {
+          "privacy_request_id": {
+            "type": "string",
+            "title": "Privacy Request Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PrivacyRequestStatus"
+          },
+          "results": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "privacy_request_id",
+          "status",
+          "results"
+        ],
+        "title": "FilteredPrivacyRequestResults",
+        "description": "Schema representing the status and results of a test privacy request"
+      },
+      "GCSAuthMethod": {
+        "type": "string",
+        "enum": [
+          "adc",
+          "service_account_keys"
+        ],
+        "title": "GCSAuthMethod"
       },
       "Generate": {
         "properties": {
@@ -17332,6 +18784,16 @@
         "title": "GetRegistrationStatusResponse",
         "description": "Reflects the registration status of a Fides deployment."
       },
+      "GoogleCloudSQLIPType": {
+        "type": "string",
+        "enum": [
+          "public",
+          "private",
+          "psc"
+        ],
+        "title": "GoogleCloudSQLIPType",
+        "description": "Enum for Google Cloud SQL IP types"
+      },
       "GoogleCloudSQLMySQLDocsSchema": {
         "properties": {
           "db_iam_user": {
@@ -17357,6 +18819,18 @@
             "title": "Keyfile creds",
             "description": "The contents of the key file that contains authentication credentials for a service account in GCP.",
             "sensitive": true
+          },
+          "ip_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoogleCloudSQLIPType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "IP type",
+            "description": "Specify the IP Address type required for your database (defaults to public). See the Google Cloud documentation for more information about connection options: https://cloud.google.com/sql/docs/postgres/connect-overview"
           }
         },
         "type": "object",
@@ -17382,7 +18856,14 @@
             "description": "example: friendly-tower-424214-n8:us-central1:test-ethyca"
           },
           "dbname": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Database name"
           },
           "db_schema": {
@@ -17406,13 +18887,24 @@
             "title": "Keyfile creds",
             "description": "The contents of the key file that contains authentication credentials for a service account in GCP.",
             "sensitive": true
+          },
+          "ip_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoogleCloudSQLIPType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "IP type",
+            "description": "Specify the IP Address type required for your database (defaults to public). See the Google Cloud documentation for more information about connection options: https://cloud.google.com/sql/docs/postgres/connect-overview"
           }
         },
         "type": "object",
         "required": [
           "db_iam_user",
           "instance_connection_name",
-          "dbname",
           "keyfile_creds"
         ],
         "title": "GoogleCloudSQLPostgresDocsSchema",
@@ -17614,6 +19106,35 @@
         "title": "LegalBasisForProfilingEnum",
         "description": "The model for describing the legal basis under which profiling is performed"
       },
+      "LogEntry": {
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level"
+          },
+          "module_info": {
+            "type": "string",
+            "title": "Module Info"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timestamp",
+          "level",
+          "module_info",
+          "message"
+        ],
+        "title": "LogEntry",
+        "description": "Schema representing a single log entry"
+      },
       "MSSQLDocsSchema": {
         "properties": {
           "host": {
@@ -17639,7 +19160,14 @@
             "sensitive": true
           },
           "dbname": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Database",
             "description": "The name of the specific database within the database server that you want to connect to."
           }
@@ -17648,8 +19176,7 @@
         "required": [
           "host",
           "username",
-          "password",
-          "dbname"
+          "password"
         ],
         "title": "MSSQLDocsSchema",
         "description": "MS SQL Secrets Schema for API Docs"
@@ -17726,6 +19253,20 @@
             "maxLength": 200,
             "minLength": 1,
             "title": "Pii Field"
+          },
+          "types": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "string",
+                "file"
+              ]
+            },
+            "type": "array",
+            "title": "Types",
+            "default": [
+              "string"
+            ]
           },
           "dsr_package_label": {
             "anyOf": [
@@ -17876,6 +19417,15 @@
         "title": "MaskingAPIResponse",
         "description": "The API Response returned upon masking completion"
       },
+      "MaskingStrategies": {
+        "type": "string",
+        "enum": [
+          "delete"
+        ],
+        "const": "delete",
+        "title": "MaskingStrategies",
+        "description": "Possible options for masking strategy overrides"
+      },
       "MaskingStrategyConfigurationDescription": {
         "properties": {
           "key": {
@@ -17927,6 +19477,19 @@
         "title": "MaskingStrategyDescription",
         "description": "The description model for a masking strategy"
       },
+      "MaskingStrategyOverride": {
+        "properties": {
+          "strategy": {
+            "$ref": "#/components/schemas/MaskingStrategies"
+          }
+        },
+        "type": "object",
+        "required": [
+          "strategy"
+        ],
+        "title": "MaskingStrategyOverride",
+        "description": "Overrides collection-level masking strategies."
+      },
       "MatchesEnum": {
         "type": "string",
         "enum": [
@@ -17972,6 +19535,9 @@
               },
               {
                 "$ref": "#/components/schemas/MessagingServiceDetailsMailchimpTransactional"
+              },
+              {
+                "$ref": "#/components/schemas/MessagingServiceDetailsAWS_SES"
               },
               {
                 "type": "null"
@@ -18021,6 +19587,9 @@
                 "$ref": "#/components/schemas/MessagingServiceDetailsMailchimpTransactional"
               },
               {
+                "$ref": "#/components/schemas/MessagingServiceDetailsAWS_SES"
+              },
+              {
                 "type": "null"
               }
             ],
@@ -18050,6 +19619,9 @@
               },
               {
                 "$ref": "#/components/schemas/MessagingServiceDetailsMailchimpTransactional"
+              },
+              {
+                "$ref": "#/components/schemas/MessagingServiceDetailsAWS_SES"
               },
               {
                 "type": "null"
@@ -18204,6 +19776,43 @@
         "title": "MessagingSecretsTwilioSMSDocs",
         "description": "The secrets required to connect to Twilio sms, for documentation"
       },
+      "MessagingServiceDetailsAWS_SES": {
+        "properties": {
+          "email_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email From"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "aws_region": {
+            "type": "string",
+            "title": "Aws Region"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "aws_region"
+        ],
+        "title": "MessagingServiceDetailsAWS_SES",
+        "description": "The details required to represent an AWS SES email configuration."
+      },
       "MessagingServiceDetailsMailchimpTransactional": {
         "properties": {
           "email_from": {
@@ -18273,6 +19882,63 @@
         "title": "MessagingServiceDetailsTwilioEmail",
         "description": "The details required to represent a Twilio email configuration."
       },
+      "MessagingServiceSecretsAWS_SESDocs": {
+        "properties": {
+          "auth_method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AWSAuthMethod"
+              }
+            ],
+            "title": "Authentication Method",
+            "description": "Determines which type of authentication method to use for connecting to Amazon Web Services. Currently accepted values are: `secret_keys` or `automatic`."
+          },
+          "aws_access_key_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Key ID",
+            "description": "Part of the credentials that provide access to your AWS account."
+          },
+          "aws_secret_access_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secret Access Key",
+            "description": "Part of the credentials that provide access to your AWS account.",
+            "sensitive": true
+          },
+          "aws_assume_role_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assume Role ARN",
+            "description": "If provided, the ARN of the role that should be assumed to connect to AWS."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "auth_method"
+        ],
+        "title": "MessagingServiceSecretsAWS_SESDocs",
+        "description": "The secrets required to connect to AWS SES, for documentation"
+      },
       "MessagingServiceSecretsMailchimpTransactionalDocs": {
         "properties": {
           "mailchimp_transactional_api_key": {
@@ -18294,10 +19960,11 @@
           "mailgun",
           "twilio_text",
           "twilio_email",
-          "mailchimp_transactional"
+          "mailchimp_transactional",
+          "aws_ses"
         ],
         "title": "MessagingServiceType",
-        "description": "Enum for messaging service type. Upper-cased in the database"
+        "description": "Enum for messaging service type."
       },
       "MessagingTemplateDefault": {
         "properties": {
@@ -18482,6 +20149,18 @@
             "title": "SSH required",
             "description": "Indicates whether an SSH tunnel is required for the connection. Enable this option if your MySQL server is behind a firewall and requires SSH tunneling for remote connections.",
             "default": false
+          },
+          "ssl_mode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MySQLSSLMode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "SSL Mode",
+            "description": "The SSL mode to use for the connection. Accepted values are: 'required', 'preferred', 'disabled', or an empty value."
           }
         },
         "type": "object",
@@ -18491,6 +20170,16 @@
         ],
         "title": "MySQLDocsSchema",
         "description": "MySQL Secrets Schema for API Docs"
+      },
+      "MySQLSSLMode": {
+        "type": "string",
+        "enum": [
+          "preferred",
+          "required",
+          "disabled",
+          ""
+        ],
+        "title": "MySQLSSLMode"
       },
       "NotificationApplicationConfig": {
         "properties": {
@@ -18573,6 +20262,28 @@
         ],
         "title": "OktaConfig",
         "description": "The model for the connection config for Okta"
+      },
+      "OktaDocsSchema": {
+        "properties": {
+          "org_url": {
+            "type": "string",
+            "title": "Organization URL",
+            "description": "The URL of your Okta organization (e.g. https://your-org.okta.com)"
+          },
+          "api_token": {
+            "type": "string",
+            "title": "API Token",
+            "description": "The API token used to authenticate with Okta",
+            "sensitive": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "org_url",
+          "api_token"
+        ],
+        "title": "OktaDocsSchema",
+        "description": "Okta Secrets Schema for API Docs"
       },
       "Organization": {
         "properties": {
@@ -19053,6 +20764,73 @@
           "size"
         ],
         "title": "Page[DatasetConfigSchema]"
+      },
+      "Page_DatasetResponse_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size"
+        ],
+        "title": "Page[DatasetResponse]"
       },
       "Page_Dataset_": {
         "properties": {
@@ -19867,6 +21645,16 @@
         "title": "ParamValue",
         "description": "A named variable which can be sourced from identities, dataset references, or connector params. These values\nare used to replace the placeholders in the path, header, query, and body param values."
       },
+      "PeriodicIntegrationFrequency": {
+        "type": "string",
+        "enum": [
+          "daily",
+          "weekly",
+          "monthly"
+        ],
+        "title": "PeriodicIntegrationFrequency",
+        "description": "Enum for periodic integration frequency"
+      },
       "PolicyMaskingSpec": {
         "properties": {
           "strategy": {
@@ -20218,8 +22006,21 @@
             "description": "The password used to authenticate and access the database.",
             "sensitive": true
           },
+          "ssh_required": {
+            "type": "boolean",
+            "title": "SSH required",
+            "description": "Indicates whether an SSH tunnel is required for the connection. Enable this option if your PostgreSQL server is behind a firewall and requires SSH tunneling for remote connections.",
+            "default": false
+          },
           "dbname": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Database",
             "description": "The name of the specific database within the database server that you want to connect to."
           },
@@ -20235,17 +22036,21 @@
             "title": "Schema",
             "description": "The default schema to be used for the database connection (defaults to public)."
           },
-          "ssh_required": {
-            "type": "boolean",
-            "title": "SSH required",
-            "description": "Indicates whether an SSH tunnel is required for the connection. Enable this option if your PostgreSQL server is behind a firewall and requires SSH tunneling for remote connections.",
-            "default": false
+          "ssl_mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "SSL Mode"
           }
         },
         "type": "object",
         "required": [
-          "host",
-          "dbname"
+          "host"
         ],
         "title": "PostgreSQLDocsSchema",
         "description": "Postgres Secrets Schema for API Docs"
@@ -20516,21 +22321,6 @@
             "type": "array",
             "title": "Shared Categories",
             "description": "The categories of personal data that this system shares with third parties."
-          },
-          "cookies": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Cookies"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cookies",
-            "description": "Cookies associated with this data use to deliver services and functionality"
           }
         },
         "type": "object",
@@ -20713,21 +22503,6 @@
             "title": "Shared Categories",
             "description": "The categories of personal data that this system shares with third parties."
           },
-          "cookies": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Cookies"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cookies",
-            "default": []
-          },
           "id": {
             "type": "string",
             "title": "Id",
@@ -20742,6 +22517,23 @@
         ],
         "title": "PrivacyDeclarationResponse",
         "description": "Extension of base pydantic model to include DB `id` field in the response"
+      },
+      "PrivacyRequestAccessResults": {
+        "properties": {
+          "access_result_urls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Access Result Urls"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_result_urls"
+        ],
+        "title": "PrivacyRequestAccessResults",
+        "description": "Schema for the access results of a PrivacyRequest"
       },
       "PrivacyRequestCreate": {
         "properties": {
@@ -21189,6 +22981,18 @@
             "title": "Include Custom Privacy Request Fields",
             "default": false
           },
+          "include_deleted_requests": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include Deleted Requests",
+            "default": false
+          },
           "download_csv": {
             "anyOf": [
               {
@@ -21455,6 +23259,29 @@
                 "type": "null"
               }
             ]
+          },
+          "deleted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          },
+          "deleted_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted By"
           }
         },
         "type": "object",
@@ -21509,10 +23336,11 @@
           "Privacy Center",
           "Request Manager",
           "Consent Webhook",
-          "Fides.js"
+          "Fides.js",
+          "Dataset Test"
         ],
         "title": "PrivacyRequestSource",
-        "description": "The source where the privacy request originated from\n\n- Privacy Center: Request created from the Privacy Center\n- Request Manager: Request submitted from the Admin UI's Request manager page\n- Consent Webhook: Request created as a side-effect of a consent webhook request (bidirectional consent)\n- Fides.js: Request created as a side-effect of a privacy preference update from Fides.js"
+        "description": "The source where the privacy request originated from\n\n- Privacy Center: Request created from the Privacy Center\n- Request Manager: Request submitted from the Admin UI's Request manager page\n- Consent Webhook: Request created as a side-effect of a consent webhook request (bidirectional consent)\n- Fides.js: Request created as a side-effect of a privacy preference update from Fides.js\n- Dataset Test: Standalone dataset test"
       },
       "PrivacyRequestStatus": {
         "type": "string",
@@ -21803,6 +23631,29 @@
               }
             ]
           },
+          "deleted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          },
+          "deleted_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted By"
+          },
           "results": {
             "additionalProperties": {
               "items": {
@@ -21875,6 +23726,155 @@
           "value"
         ],
         "title": "QueryParam"
+      },
+      "QueueInfo": {
+        "properties": {
+          "messages": {
+            "type": "integer",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "QueueInfo"
+      },
+      "RDSMySQLDocsSchema": {
+        "properties": {
+          "auth_method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AWSAuthMethod"
+              }
+            ],
+            "title": "Authentication Method",
+            "description": "Determines which type of authentication method to use for connecting to Amazon Web Services. Currently accepted values are: `secret_keys` or `automatic`."
+          },
+          "aws_access_key_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Key ID",
+            "description": "Part of the credentials that provide access to your AWS account."
+          },
+          "aws_secret_access_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secret Access Key",
+            "description": "Part of the credentials that provide access to your AWS account.",
+            "sensitive": true
+          },
+          "aws_assume_role_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assume Role ARN",
+            "description": "If provided, the ARN of the role that should be assumed to connect to AWS."
+          },
+          "db_username": {
+            "type": "string",
+            "title": "DB Username",
+            "description": "The user account used to authenticate and access the databases.",
+            "default": "fides_service_user"
+          },
+          "region": {
+            "type": "string",
+            "title": "Region",
+            "description": "The AWS region where the RDS instances are located."
+          }
+        },
+        "type": "object",
+        "required": [
+          "auth_method",
+          "region"
+        ],
+        "title": "RDSMySQLDocsSchema",
+        "description": "RDS MySQL Secrets Schema for API Docs"
+      },
+      "RDSPostgresDocsSchema": {
+        "properties": {
+          "auth_method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AWSAuthMethod"
+              }
+            ],
+            "title": "Authentication Method",
+            "description": "Determines which type of authentication method to use for connecting to Amazon Web Services. Currently accepted values are: `secret_keys` or `automatic`."
+          },
+          "aws_access_key_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Key ID",
+            "description": "Part of the credentials that provide access to your AWS account."
+          },
+          "aws_secret_access_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secret Access Key",
+            "description": "Part of the credentials that provide access to your AWS account.",
+            "sensitive": true
+          },
+          "aws_assume_role_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assume Role ARN",
+            "description": "If provided, the ARN of the role that should be assumed to connect to AWS."
+          },
+          "db_username": {
+            "type": "string",
+            "title": "DB Username",
+            "description": "The user account used to authenticate and access the databases.",
+            "default": "fides_service_user"
+          },
+          "region": {
+            "type": "string",
+            "title": "Region",
+            "description": "The AWS region where the RDS instances are located."
+          }
+        },
+        "type": "object",
+        "required": [
+          "auth_method",
+          "region"
+        ],
+        "title": "RDSPostgresDocsSchema",
+        "description": "RDS Postgres Secrets Schema for API Docs"
       },
       "RateLimit": {
         "properties": {
@@ -23087,13 +25087,22 @@
           "secrets": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MongoDBDocsSchema"
+                "$ref": "#/components/schemas/BigQueryDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/PostgreSQLDocsSchema"
+                "$ref": "#/components/schemas/DatahubDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/MySQLDocsSchema"
+                "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/DynamoDBDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/EmailDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/FidesDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/GoogleCloudSQLMySQLDocsSchema"
@@ -23102,49 +25111,55 @@
                 "$ref": "#/components/schemas/GoogleCloudSQLPostgresDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/RedshiftDocsSchema"
-              },
-              {
-                "$ref": "#/components/schemas/SnowflakeDocsSchema"
-              },
-              {
-                "$ref": "#/components/schemas/MSSQLDocsSchema"
+                "$ref": "#/components/schemas/ManualWebhookDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/MariaDBDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/BigQueryDocsSchema"
+                "$ref": "#/components/schemas/MongoDBDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/SaaSSchema"
+                "$ref": "#/components/schemas/MSSQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/EmailDocsSchema"
+                "$ref": "#/components/schemas/MySQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/ManualWebhookDocsSchema"
+                "$ref": "#/components/schemas/OktaDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/TimescaleDocsSchema"
+                "$ref": "#/components/schemas/PostgreSQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/FidesDocsSchema"
+                "$ref": "#/components/schemas/RDSMySQLDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/SovrnDocsSchema"
+                "$ref": "#/components/schemas/RDSPostgresDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/DynamoDBDocsSchema"
+                "$ref": "#/components/schemas/RedshiftDocsSchema"
               },
               {
                 "$ref": "#/components/schemas/S3DocsSchema"
               },
               {
+                "$ref": "#/components/schemas/SaaSSchema"
+              },
+              {
                 "$ref": "#/components/schemas/ScyllaDocsSchema"
               },
               {
-                "$ref": "#/components/schemas/DynamicErasureEmailDocsSchema"
+                "$ref": "#/components/schemas/SnowflakeDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/SovrnDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/TimescaleDocsSchema"
+              },
+              {
+                "$ref": "#/components/schemas/WebsiteSchema"
               }
             ],
             "title": "Secrets"
@@ -23209,6 +25224,7 @@
           "dataset:create_or_update",
           "dataset:delete",
           "dataset:read",
+          "dataset:test",
           "encryption:exec",
           "messaging-template:update",
           "evaluation:create",
@@ -23238,6 +25254,7 @@
           "privacy-preference-history:read",
           "privacy-request:create",
           "privacy-request:resume",
+          "privacy-request-access-results:read",
           "privacy-request:delete",
           "privacy-request-notifications:create_or_update",
           "privacy-request-notifications:read",
@@ -23279,7 +25296,8 @@
           "validate:exec",
           "webhook:create_or_update",
           "webhook:delete",
-          "webhook:read"
+          "webhook:read",
+          "worker-stats:read"
         ],
         "title": "ScopeRegistryEnum"
       },
@@ -23410,14 +25428,28 @@
             "description": "The name of the Snowflake warehouse where your queries will be executed."
           },
           "database_name": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Database",
-            "description": "The name of the Snowflake database you want to connect to."
+            "description": "Only provide a database name to scope discovery monitors and privacy request automation to a specific database. In most cases, this can be left blank."
           },
           "schema_name": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Schema",
-            "description": "The name of the Snowflake schema within the selected database."
+            "description": "Only provide a schema to scope discovery monitors and privacy request automation to a specific schema. In most cases, this can be left blank."
           },
           "role_name": {
             "anyOf": [
@@ -23436,9 +25468,7 @@
         "required": [
           "account_identifier",
           "user_login_name",
-          "warehouse_name",
-          "database_name",
-          "schema_name"
+          "warehouse_name"
         ],
         "title": "SnowflakeDocsSchema",
         "description": "Snowflake Secrets Schema for API Docs"
@@ -23577,6 +25607,9 @@
                 "$ref": "#/components/schemas/StorageDetailsS3"
               },
               {
+                "$ref": "#/components/schemas/StorageDetailsGCS"
+              },
+              {
                 "$ref": "#/components/schemas/StorageDetailsLocal"
               }
             ],
@@ -23628,6 +25661,9 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/StorageDetailsS3"
+              },
+              {
+                "$ref": "#/components/schemas/StorageDetailsGCS"
               },
               {
                 "$ref": "#/components/schemas/StorageDetailsLocal"
@@ -23706,6 +25742,42 @@
         "title": "StorageDetails",
         "description": "Enum for storage detail keys"
       },
+      "StorageDetailsGCS": {
+        "properties": {
+          "naming": {
+            "type": "string",
+            "title": "Naming",
+            "default": "request_id"
+          },
+          "auth_method": {
+            "$ref": "#/components/schemas/GCSAuthMethod"
+          },
+          "bucket": {
+            "type": "string",
+            "title": "Bucket"
+          },
+          "max_retries": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Retries",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "auth_method",
+          "bucket"
+        ],
+        "title": "StorageDetailsGCS",
+        "description": "The details required to represent a Google Cloud Storage bucket."
+      },
       "StorageDetailsLocal": {
         "properties": {
           "naming": {
@@ -23755,23 +25827,120 @@
         "title": "StorageDetailsS3",
         "description": "The details required to represent an AWS S3 storage bucket."
       },
-      "StorageSecretsS3Docs": {
+      "StorageSecretsGCSDocs": {
         "properties": {
-          "aws_access_key_id": {
+          "type": {
             "type": "string",
-            "title": "Aws Access Key Id"
+            "title": "Type",
+            "default": "service_account"
           },
-          "aws_secret_access_key": {
+          "project_id": {
             "type": "string",
-            "title": "Aws Secret Access Key"
+            "title": "Project Id"
+          },
+          "private_key_id": {
+            "type": "string",
+            "title": "Private Key Id"
+          },
+          "private_key": {
+            "type": "string",
+            "title": "Private Key"
+          },
+          "client_email": {
+            "type": "string",
+            "title": "Client Email"
+          },
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
+          "auth_uri": {
+            "type": "string",
+            "title": "Auth Uri"
+          },
+          "token_uri": {
+            "type": "string",
+            "title": "Token Uri"
+          },
+          "auth_provider_x509_cert_url": {
+            "type": "string",
+            "title": "Auth Provider X509 Cert Url"
+          },
+          "client_x509_cert_url": {
+            "type": "string",
+            "title": "Client X509 Cert Url"
+          },
+          "universe_domain": {
+            "type": "string",
+            "title": "Universe Domain"
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "aws_access_key_id",
-          "aws_secret_access_key"
+          "project_id",
+          "private_key_id",
+          "private_key",
+          "client_email",
+          "client_id",
+          "auth_uri",
+          "token_uri",
+          "auth_provider_x509_cert_url",
+          "client_x509_cert_url",
+          "universe_domain"
         ],
+        "title": "StorageSecretsGCSDocs",
+        "description": "The secrets required to connect to Google Cloud Storage, for documentation"
+      },
+      "StorageSecretsS3Docs": {
+        "properties": {
+          "aws_access_key_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aws Access Key Id"
+          },
+          "aws_secret_access_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aws Secret Access Key"
+          },
+          "region_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Name"
+          },
+          "assume_role_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assume Role Arn"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
         "title": "StorageSecretsS3Docs",
         "description": "The secrets required to connect to S3, for documentation"
       },
@@ -23791,6 +25960,7 @@
         "type": "string",
         "enum": [
           "s3",
+          "gcs",
           "local"
         ],
         "title": "StorageTypeApiAccepted",
@@ -24197,21 +26367,6 @@
             ],
             "title": "Legitimate Interest Disclosure Url",
             "description": "A URL that points to the system's publicly accessible legitimate interest disclosure."
-          },
-          "cookies": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Cookies"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cookies",
-            "description": "System-level cookies unassociated with a data use to deliver services and functionality"
           }
         },
         "type": "object",
@@ -24649,21 +26804,6 @@
             "title": "Legitimate Interest Disclosure Url",
             "description": "A URL that points to the system's publicly accessible legitimate interest disclosure."
           },
-          "cookies": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/Cookies"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Cookies",
-            "description": "System-level cookies unassociated with a data use to deliver services and functionality"
-          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -24678,7 +26818,7 @@
                 "type": "null"
               }
             ],
-            "description": "\n    Describes the returned schema for a ConnectionConfiguration.\n    "
+            "description": "\n    Describes the returned schema for a ConnectionConfiguration.\n\n    The mixin base class ensures that `secrets` sensitive values are masked.\n    "
           },
           "data_stewards": {
             "anyOf": [
@@ -24711,12 +26851,61 @@
       "SystemType": {
         "type": "string",
         "enum": [
-          "saas",
+          "data_catalog",
           "database",
+          "email",
           "manual",
-          "email"
+          "saas",
+          "system",
+          "website"
         ],
         "title": "SystemType"
+      },
+      "TaskDetails": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "task_name": {
+            "type": "string",
+            "title": "Task Name"
+          },
+          "args": {
+            "items": {},
+            "type": "array",
+            "title": "Args"
+          },
+          "keyword_args": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keyword Args"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "task_name",
+          "args"
+        ],
+        "title": "TaskDetails"
       },
       "TestMessagingStatusMessage": {
         "properties": {
@@ -24752,6 +26941,20 @@
         ],
         "title": "TestMessagingStatusMessage",
         "description": "A schema for testing functionality of a messaging config."
+      },
+      "TestPrivacyRequest": {
+        "properties": {
+          "privacy_request_id": {
+            "type": "string",
+            "title": "Privacy Request Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "privacy_request_id"
+        ],
+        "title": "TestPrivacyRequest",
+        "description": "Schema containing the data for a test privacy request"
       },
       "TestStatus": {
         "type": "string",
@@ -24835,8 +27038,21 @@
             "description": "The password used to authenticate and access the database.",
             "sensitive": true
           },
+          "ssh_required": {
+            "type": "boolean",
+            "title": "SSH required",
+            "description": "Indicates whether an SSH tunnel is required for the connection. Enable this option if your PostgreSQL server is behind a firewall and requires SSH tunneling for remote connections.",
+            "default": false
+          },
           "dbname": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Database",
             "description": "The name of the specific database within the database server that you want to connect to."
           },
@@ -24852,20 +27068,38 @@
             "title": "Schema",
             "description": "The default schema to be used for the database connection (defaults to public)."
           },
-          "ssh_required": {
-            "type": "boolean",
-            "title": "SSH required",
-            "description": "Indicates whether an SSH tunnel is required for the connection. Enable this option if your PostgreSQL server is behind a firewall and requires SSH tunneling for remote connections.",
-            "default": false
+          "ssl_mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "SSL Mode"
           }
         },
         "type": "object",
         "required": [
-          "host",
-          "dbname"
+          "host"
         ],
         "title": "TimescaleDocsSchema",
         "description": "TimescaleDB Secrets Schema for API Docs"
+      },
+      "UnlabeledIdentities": {
+        "properties": {
+          "data": {
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "title": "UnlabeledIdentities",
+        "description": "A model for validating identity dictionaries where standard fields use Identity's validation\nbut custom fields just need to be valued."
       },
       "UserCreate": {
         "properties": {
@@ -25244,7 +27478,14 @@
             "$ref": "#/components/schemas/Dataset"
           },
           "traversal_details": {
-            "$ref": "#/components/schemas/DatasetTraversalDetails"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DatasetTraversalDetails"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -25467,6 +27708,22 @@
         "title": "WebhookOrder",
         "description": "Schema for displaying a minimal amount of information about the webhook and its order"
       },
+      "WebsiteSchema": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "format": "uri",
+            "title": "URL"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "WebsiteSchema",
+        "description": "Schema to validate the secrets needed for a generic website connector"
+      },
       "WorkerHealthCheck": {
         "properties": {
           "workers_enabled": {
@@ -25497,6 +27754,62 @@
         "title": "WorkerHealthCheck",
         "description": "Worker Healthcheck Schema"
       },
+      "WorkerInfo": {
+        "properties": {
+          "active_task": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskDetails"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reserved_tasks": {
+            "items": {
+              "$ref": "#/components/schemas/TaskDetails"
+            },
+            "type": "array",
+            "title": "Reserved Tasks",
+            "default": []
+          },
+          "registered_tasks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Registered Tasks",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "WorkerInfo"
+      },
+      "WorkerStats": {
+        "properties": {
+          "queues": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/QueueInfo"
+            },
+            "type": "object",
+            "title": "Queues"
+          },
+          "workers": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkerInfo"
+            },
+            "type": "object",
+            "title": "Workers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queues",
+          "workers"
+        ],
+        "title": "WorkerStats"
+      },
       "fides__api__schemas__connection_configuration__connection_secrets_bigquery__KeyfileCreds": {
         "properties": {
           "type": {
@@ -25523,7 +27836,7 @@
                 "type": "null"
               }
             ],
-            "title": "Private Key ID"
+            "title": "Private key ID"
           },
           "private_key": {
             "anyOf": [
@@ -25534,7 +27847,7 @@
                 "type": "null"
               }
             ],
-            "title": "Private Key",
+            "title": "Private key",
             "sensitive": true
           },
           "client_email": {
@@ -25547,7 +27860,7 @@
                 "type": "null"
               }
             ],
-            "title": "Client Email"
+            "title": "Client email"
           },
           "client_id": {
             "anyOf": [
@@ -25591,7 +27904,7 @@
                 "type": "null"
               }
             ],
-            "title": "Auth Provider X509 Cert URL"
+            "title": "Auth provider X509 cert URL"
           },
           "client_x509_cert_url": {
             "anyOf": [
@@ -25602,7 +27915,7 @@
                 "type": "null"
               }
             ],
-            "title": "Client X509 Cert URL"
+            "title": "Client X509 cert URL"
           }
         },
         "type": "object",

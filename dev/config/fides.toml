@@ -9,6 +9,13 @@
 # Toggle whether the Admin UI is served.
 enabled = true # boolean
 
+# The maximum number of rows permitted to be returned in a privacy
+# request report download
+max_privacy_request_download_rows = 100000 # integer
+
+# This setting controls how errors are notified to users.
+error_notification_mode = "console_only" # string
+
 #------------#
 #-- CELERY --#
 #--------------------------------------------------------------------#
@@ -32,7 +39,7 @@ task_always_eager = true # boolean
 
 # A fully anonymized unique identifier that is automatically generated
 # by the application. Used for anonymous analytics when opted-in.
-analytics_id = "d17920f5087dbce5b719556315e5c321" # string
+analytics_id = "34eee28a50a9b4879299f31c9b6b27f5" # string
 
 # When set to True, disables functionality that requires making calls
 # to a Fides webserver.
@@ -85,6 +92,22 @@ api_engine_pool_size = 50 # integer
 # overflow connections are discarded afterwards and not maintained.
 api_engine_max_overflow = 50 # integer
 
+# Number of seconds of inactivity before the client sends a TCP
+# keepalive packet to verify the database connection is still alive.
+api_engine_keepalives_idle = 30 # integer
+
+# Number of seconds between TCP keepalive retries if the initial
+# keepalive packet receives no response. These are client-side retries.
+api_engine_keepalives_interval = 10 # integer
+
+# Maximum number of TCP keepalive retries before the client considers
+# the connection dead and closes it.
+api_engine_keepalives_count = 5 # integer
+
+# If true, the async engine will pre-ping connections to ensure they
+# are still valid before using them.
+api_async_engine_pool_pre_ping = false # boolean
+
 # The name of the application database.
 db = "default_db" # string
 
@@ -114,6 +137,18 @@ task_engine_pool_size = 50 # integer
 # connections are discarded afterwards and not maintained.
 task_engine_max_overflow = 50 # integer
 
+# Number of seconds of inactivity before the client sends a TCP
+# keepalive packet to verify the database connection is still alive.
+task_engine_keepalives_idle = 30 # integer
+
+# Number of seconds between TCP keepalive retries if the initial
+# keepalive packet receives no response. These are client-side retries.
+task_engine_keepalives_interval = 10 # integer
+
+# Maximum number of TCP keepalive retries before the client considers
+# the connection dead and closes it.
+task_engine_keepalives_count = 5 # integer
+
 # The database user with which to login to the application database.
 user = "defaultuser" # string
 
@@ -136,7 +171,8 @@ masking_strict = true # boolean
 # (e.g., pre- and post-processing webhooks).
 privacy_request_delay_timeout = 3600 # integer
 
-# Whether privacy requests require explicit approval to execute.
+# Whether access and erasure privacy requests require explicit approval
+# to execute. Consent privacy requests are always auto-approved.
 require_manual_request_approval = false # boolean
 
 # Whether privacy requests require user identity verification.
@@ -164,8 +200,14 @@ request_task_ttl = 604800 # integer
 # Seconds between polling for Privacy Requests that should change state
 state_polling_interval = 30 # integer
 
+# Seconds between polling for interrupted tasks to requeue
+interrupted_task_requeue_interval = 300 # integer
+
 # Temporary flag to switch to using DSR 3.0 to process your tasks.
 use_dsr_3_0 = false # boolean
+
+# Whether fuzzy search is enabled for privacy request lookups.
+fuzzy_search_enabled = true # boolean
 
 #-------------#
 #-- LOGGING --#
@@ -293,7 +335,7 @@ encoding = "UTF-8" # string
 # typically used by the CLI. The other option, `prod`, requires
 # authentication for _all_ endpoints that may contain sensitive
 # information.
-env = "dev" # string
+env = "prod" # string
 
 # The number of times identity verification will be attempted before
 # raising an error.
@@ -333,6 +375,14 @@ root_user_scopes = [] # array
 
 # The list of roles that are given to the root user.
 root_user_roles = [] # array
+
+# If set to True, the user interface will display a download button for
+# subject requests.
+subject_request_download_ui_enabled = false # boolean
+
+# If set to True, contributor and owner roles will be able to run test
+# privacy requests.
+dsr_testing_tools_enabled = false # boolean
 
 # The number of seconds that a pre-signed download URL when using S3
 # storage will be valid. The default is equal to 5 days.
